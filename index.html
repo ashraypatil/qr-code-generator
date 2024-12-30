@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+        header {
+            width: 100%;
+            background-color: #4caf50;
+            padding: 10px 20px;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .section {
+            flex: 1 1 300px;
+            margin: 10px;
+            text-align: center;
+        }
+        input[type="text"],
+        input[type="color"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        canvas {
+            margin: 20px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>QR Code Generator</h1>
+    </header>
+    <div class="container">
+        <div class="section" id="input-section">
+            <h3>Input</h3>
+            <input type="text" id="qr-input" placeholder="Enter text or URL" />
+            <button onclick="generateQRCode()">Generate QR Code</button>
+        </div>
+        <div class="section" id="preview-section">
+            <h3>Preview</h3>
+            <canvas id="qr-code"></canvas>
+        </div>
+        <div class="section" id="customization-section">
+            <h3>Customize</h3>
+            <label for="qr-color">QR Code Color:</label>
+            <input type="color" id="qr-color" value="#000000" />
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script>
+    const canvas = document.getElementById('qr-code');
+    const input = document.getElementById('qr-input');
+    const colorPicker = document.getElementById('qr-color');
+
+    function generateQRCode() {
+        const text = input.value.trim();
+        const color = colorPicker.value;
+
+        if (!text) {
+            alert('Please enter text or a URL!');
+            return;
+        }
+
+        // Clear existing QR Code
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Generate QR Code
+        QRCode.toCanvas(
+            canvas,
+            text,
+            {
+                width: 200,
+                margin: 1,
+                color: {
+                    dark: color, // QR code color
+                    light: "#ffffff" // Background color
+                }
+            },
+            function (error) {
+                if (error) {
+                    console.error(error);
+                    alert('Failed to generate QR Code!');
+                } else {
+                    console.log('QR Code generated successfully!');
+                }
+            }
+        );
+    }
+</script>
+
+</body>
+</html>

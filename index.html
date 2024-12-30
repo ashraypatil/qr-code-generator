@@ -104,7 +104,7 @@
             </div>
             <!-- File input for logo upload -->
             <label for="qr-logo">Upload Logo:</label>
-            <input type="file" id="qr-logo" accept="image/*" />
+            <input type="file" id="qr-logo" accept="image/*" onchange="updateLogo()" />
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
@@ -163,6 +163,16 @@
                 generateQRCode(); // Regenerate the QR Code with the new color
             } else {
                 alert('Please enter text or a URL before selecting a color.');
+            }
+        }
+
+        // Function to handle logo upload and update
+        function updateLogo() {
+            const text = input.value.trim();
+            if (text) {
+                generateQRCode(); // Regenerate the QR Code to immediately include the new logo
+            } else {
+                alert('Please enter text or a URL before uploading a logo.');
             }
         }
 

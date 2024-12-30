@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Generator</title>
     <style>
+        /* Basic styling for the app */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -41,7 +42,8 @@
             text-align: center;
         }
         input[type="text"],
-        input[type="color"] {
+        input[type="color"],
+        input[type="file"] {
             padding: 10px;
             margin: 10px 0;
             width: 80%;
@@ -70,63 +72,103 @@
         <h1>QR Code Generator</h1>
     </header>
     <div class="container">
+        <!-- Input Section -->
         <div class="section" id="input-section">
             <h3>Input</h3>
+            <!-- Input field for text or URL -->
             <input type="text" id="qr-input" placeholder="Enter text or URL" />
+            <!-- Button to generate QR Code -->
             <button onclick="generateQRCode()">Generate QR Code</button>
         </div>
+        <!-- Preview Section -->
         <div class="section" id="preview-section">
             <h3>Preview</h3>
+            <!-- Canvas to display the QR Code -->
             <canvas id="qr-code"></canvas>
         </div>
+        <!-- Customization Section -->
         <div class="section" id="customization-section">
             <h3>Customize</h3>
+            <!-- Color picker for QR Code color -->
             <label for="qr-color">QR Code Color:</label>
             <input type="color" id="qr-color" value="#000000" />
+            <!-- File input for logo upload -->
+            <label for="qr-logo">Upload Logo:</label>
+            <input type="file" id="qr-logo" accept="image/*" />
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <script>
-    const canvas = document.getElementById('qr-code');
-    const input = document.getElementById('qr-input');
-    const colorPicker = document.getElementById('qr-color');
+        // DOM elements
+        const canvas = document.getElementById('qr-code');
+        const input = document.getElementById('qr-input');
+        const colorPicker = document.getElementById('qr-color');
+        const logoInput = document.getElementById('qr-logo');
 
-    function generateQRCode() {
-        const text = input.value.trim();
-        const color = colorPicker.value;
+        // Function to generate QR Code
+        function generateQRCode() {
+            const text = input.value.trim(); // Get text input
+            const color = colorPicker.value; // Get selected color
 
-        if (!text) {
-            alert('Please enter text or a URL!');
-            return;
+            if (!text) {
+                alert('Please enter text or a URL!');
+                return;
+            }
+
+            // Clear existing QR Code
+            const context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Generate QR Code with specified options
+            QRCode.toCanvas(
+                canvas,
+                text,
+                {
+                    width: 200,
+                    margin: 1,
+                    color: {
+                        dark: color, // QR Code color
+                        light: "#ffffff" // Background color
+                    }
+                },
+                function (error) {
+                    if (error) {
+                        console.error(error);
+                        alert('Failed to generate QR Code!');
+                    } else {
+                        console.log('QR Code generated successfully!');
+                        // Add logo if uploaded
+                        if (logoInput.files[0]) {
+                            addLogoToQRCode();
+                        }
+                    }
+                }
+            );
         }
 
-        // Clear existing QR Code
-        const context = canvas.getContext('2d');
-        context.clearRect(0, 0, canvas.width, canvas.height);
+        // Function to add logo to the QR Code
+        function addLogoToQRCode() {
+            const file = logoInput.files[0];
+            if (!file) return;
 
-        // Generate QR Code
-        QRCode.toCanvas(
-            canvas,
-            text,
-            {
-                width: 200,
-                margin: 1,
-                color: {
-                    dark: color, // QR code color
-                    light: "#ffffff" // Background color
-                }
-            },
-            function (error) {
-                if (error) {
-                    console.error(error);
-                    alert('Failed to generate QR Code!');
-                } else {
-                    console.log('QR Code generated successfully!');
-                }
-            }
-        );
-    }
-</script>
+            const img = new Image();
+            const context = canvas.getContext('2d');
 
+            img.onload = () => {
+                const canvasWidth = canvas.width;
+                const canvasHeight = canvas.height;
+
+                // Calculate logo size and position
+                const logoSize = canvasWidth * 0.2; // Logo is 20% of the QR Code size
+                const x = (canvasWidth - logoSize) / 2;
+                const y = (canvasHeight - logoSize) / 2;
+
+                // Draw the logo on the QR Code
+                context.drawImage(img, x, y, logoSize, logoSize);
+            };
+
+            img.src = URL.createObjectURL(file);
+        }
+    </script>
 </body>
 </html>

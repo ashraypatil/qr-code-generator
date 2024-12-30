@@ -73,6 +73,9 @@
             margin: 20px auto;
             display: block;
         }
+        .download-options {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -105,6 +108,13 @@
             <!-- File input for logo upload -->
             <label for="qr-logo">Upload Logo:</label>
             <input type="file" id="qr-logo" accept="image/*" onchange="updateLogo()" />
+        </div>
+        <!-- Download Section -->
+        <div class="section download-options">
+            <h3>Download</h3>
+            <button onclick="downloadQRCode('png')">Download as PNG</button>
+            <button onclick="downloadQRCode('jpg')">Download as JPG</button>
+            <button onclick="downloadQRCode('svg')">Download as SVG</button>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
@@ -198,6 +208,35 @@
             };
 
             img.src = URL.createObjectURL(file);
+        }
+
+        // Function to download the QR Code in the specified format
+        function downloadQRCode(format) {
+            const link = document.createElement('a');
+            const context = canvas.getContext('2d');
+
+            if (format === 'png' || format === 'jpg') {
+                link.href = canvas.toDataURL(`image/${format}`);
+                link.download = `qr-code.${format}`;
+            } else if (format === 'svg') {
+                QRCode.toString(
+                    input.value.trim(),
+                    { type: 'svg', color: { dark: colorPicker.value, light: "#ffffff" } },
+                    (err, svgString) => {
+                        if (err) {
+                            console.error(err);
+                            alert('Failed to generate SVG!');
+                        } else {
+                            const blob = new Blob([svgString], { type: 'image/svg+xml' });
+                            link.href = URL.createObjectURL(blob);
+                            link.download = 'qr-code.svg';
+                        }
+                    }
+                );
+                return;
+            }
+
+            link.click();
         }
     </script>
 </body>

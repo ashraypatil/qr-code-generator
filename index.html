@@ -75,6 +75,18 @@
         }
         .download-options {
             margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .download-options button {
+            margin: 5px 0;
+            width: 150px;
+        }
+        .logo-tip {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -108,6 +120,7 @@
             <!-- File input for logo upload -->
             <label for="qr-logo">Upload Logo:</label>
             <input type="file" id="qr-logo" accept="image/*" onchange="updateLogo()" />
+            <p class="logo-tip">Tip: For best results, use square logos and ensure the file size is under 500KB.</p>
         </div>
         <!-- Download Section -->
         <div class="section download-options">

@@ -42,13 +42,21 @@
             text-align: center;
         }
         input[type="text"],
-        input[type="color"],
         input[type="file"] {
             padding: 10px;
             margin: 10px 0;
             width: 80%;
             border: 1px solid #ccc;
             border-radius: 5px;
+        }
+        .color-picker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .color-picker input {
+            margin-left: 10px;
         }
         button {
             padding: 10px 20px;
@@ -90,8 +98,10 @@
         <div class="section" id="customization-section">
             <h3>Customize</h3>
             <!-- Color picker for QR Code color -->
-            <label for="qr-color">QR Code Color:</label>
-            <input type="color" id="qr-color" value="#000000" />
+            <div class="color-picker">
+                <label for="qr-color">QR Code Color:</label>
+                <input type="color" id="qr-color" value="#000000" />
+            </div>
             <!-- File input for logo upload -->
             <label for="qr-logo">Upload Logo:</label>
             <input type="file" id="qr-logo" accept="image/*" />

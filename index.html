@@ -89,6 +89,22 @@
             margin-top: 5px;
         }
     </style>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_TRACKING_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'YOUR_TRACKING_ID');
+
+        // Track custom events
+        function trackEvent(eventName, eventDetails) {
+            if (window.gtag) {
+                gtag('event', eventName, eventDetails);
+            }
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -170,6 +186,8 @@
                         alert('Failed to generate QR Code!');
                     } else {
                         console.log('QR Code generated successfully!');
+                        trackEvent('qr_code_generated', { text_length: text.length, color: color }); // Track event
+
                         // Add logo if uploaded
                         if (logoInput.files[0]) {
                             addLogoToQRCode();
@@ -226,11 +244,12 @@
         // Function to download the QR Code in the specified format
         function downloadQRCode(format) {
             const link = document.createElement('a');
-            const context = canvas.getContext('2d');
 
             if (format === 'png' || format === 'jpg') {
                 link.href = canvas.toDataURL(`image/${format}`);
                 link.download = `qr-code.${format}`;
+                link.click();
+                trackEvent('file_downloaded', { format: format }); // Track event
             } else if (format === 'svg') {
                 QRCode.toString(
                     input.value.trim(),
@@ -241,15 +260,16 @@
                             alert('Failed to generate SVG!');
                         } else {
                             const blob = new Blob([svgString], { type: 'image/svg+xml' });
-                            link.href = URL.createObjectURL(blob);
+                            const url = URL.createObjectURL(blob);
+                            link.href = url;
                             link.download = 'qr-code.svg';
+                            link.click();
+                            URL.revokeObjectURL(url); // Clean up the URL object
+                            trackEvent('file_downloaded', { format: 'svg' }); // Track event
                         }
                     }
                 );
-                return;
             }
-
-            link.click();
         }
     </script>
 </body>

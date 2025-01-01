@@ -26,39 +26,35 @@
         <h1>QR Code Generator</h1>
     </header>
     <div class="container">
-        <!-- Input Section -->
-        <div class="section" id="input-section">
-            <h3>Input</h3>
-            <!-- Input field for text or URL -->
-            <input type="text" id="qr-input" placeholder="Enter text or URL" />
-            <!-- Button to generate QR Code -->
-            <button onclick="generateQRCode()">Generate QR Code</button>
-        </div>
-        <!-- Preview Section -->
-        <div class="section" id="preview-section">
-            <h3>Preview</h3>
-            <!-- Canvas to display the QR Code -->
-            <canvas id="qr-code"></canvas>
-        </div>
-        <!-- Customization Section -->
-        <div class="section" id="customization-section">
-            <h3>Customize</h3>
-            <!-- Color picker for QR Code color -->
-            <div class="color-picker">
-                <label for="qr-color">QR Code Color:</label>
-                <input type="color" id="qr-color" value="#000000" onchange="updateColor()" />
+        <div class="row">
+            <!-- Input Section -->
+            <div class="section" id="input-section">
+                <h3>Input</h3>
+                <input type="text" id="qr-input" placeholder="Enter text or URL" />
+                <button onclick="generateQRCode()">Generate QR Code</button>
             </div>
-            <!-- File input for logo upload -->
-            <label for="qr-logo">Upload Logo:</label>
-            <input type="file" id="qr-logo" accept="image/*" onchange="updateLogo()" />
-            <p class="logo-tip">Tip: For best results, use square logos and ensure the file size is under 500KB.</p>
+            <div class="section" id="preview-section">
+                <h3>Preview</h3>
+                <canvas id="qr-code"></canvas>
+            </div>
         </div>
-        <!-- Download Section -->
-        <div class="section download-options">
-            <h3>Download</h3>
-            <button onclick="downloadQRCode('png')">Download as PNG</button>
-            <button onclick="downloadQRCode('jpg')">Download as JPG</button>
-            <button onclick="downloadQRCode('svg')">Download as SVG</button>
+        <div class="row">
+            <div class="section" id="customization-section">
+                <h3>Customize</h3>
+                <div class="color-picker">
+                    <label for="qr-color">QR Code Color:</label>
+                    <input type="color" id="qr-color" value="#000000" onchange="updateColor(); updateQRCodeLive()" />
+                </div>
+                <label for="qr-logo">Upload Logo:</label>
+                <input type="file" id="qr-logo" accept="image/*" onchange="updateLogo(); updateQRCodeLive()" />
+                <p class="logo-tip">Tip: For best results, use square logos under 500KB.</p>
+            </div>
+            <div class="section download-options">
+                <h3>Download</h3>
+                <button onclick="downloadQRCode('png')">Download as PNG</button>
+                <button onclick="downloadQRCode('jpg')">Download as JPG</button>
+                <button onclick="downloadQRCode('svg')">Download as SVG</button>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>

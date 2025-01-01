@@ -1,5 +1,5 @@
-let qrCodeCanvas;
-let logoImage;
+const qrCanvas = document.getElementById("qr-code");
+let logoImage = null; // Store the uploaded logo image
 
 // Generate the QR code
 function generateQRCode() {
@@ -11,7 +11,7 @@ function generateQRCode() {
     return;
   }
 
-  QRCode.toCanvas(document.getElementById("qr-code"), input, {
+  QRCode.toCanvas(qrCanvas, input, {
     color: {
       dark: color,
       light: "#ffffff",
@@ -22,11 +22,11 @@ function generateQRCode() {
         addLogoToCanvas();
       }
     })
-    .catch((err) => console.error(err));
+    .catch((err) => console.error("Error generating QR code:", err));
 }
 
-// Update the color of the QR code
-function updateColor() {
+// Live QR code update
+function updateQRCodeLive() {
   generateQRCode();
 }
 
@@ -49,11 +49,12 @@ function updateLogo() {
 
 // Add logo to the QR code canvas
 function addLogoToCanvas() {
-  const canvas = document.getElementById("qr-code");
-  const ctx = canvas.getContext("2d");
-  const { width, height } = canvas;
+  const ctx = qrCanvas.getContext("2d");
+  const { width, height } = qrCanvas;
 
-  const logoSize = Math.min(width, height) * 0.2;
+  if (!logoImage) return;
+
+  const logoSize = Math.min(width, height) * 0.2; // Logo should occupy 20% of QR code
   const logoX = (width - logoSize) / 2;
   const logoY = (height - logoSize) / 2;
 
@@ -62,20 +63,39 @@ function addLogoToCanvas() {
 
 // Download the QR code
 function downloadQRCode(format) {
-  const canvas = document.getElementById("qr-code");
   const link = document.createElement("a");
 
   if (format === "svg") {
-    QRCode.toString(canvas, { type: "svg" }, (err, svgString) => {
-      if (err) throw err;
-      const blob = new Blob([svgString], { type: "image/svg+xml" });
-      link.href = URL.createObjectURL(blob);
-      link.download = "qr-code.svg";
-      link.click();
-    });
+    QRCode.toString(
+      document.getElementById("qr-input").value,
+      {
+        type: "svg",
+        color: {
+          dark: document.getElementById("qr-color").value,
+          light: "#ffffff",
+        },
+      },
+      (err, svgString) => {
+        if (err) {
+          console.error("Error generating SVG:", err);
+          alert(
+            "An error occurred while generating the SVG. Please try again."
+          );
+          return;
+        }
+        const blob = new Blob([svgString], { type: "image/svg+xml" });
+        link.href = URL.createObjectURL(blob);
+        link.download = "qr-code.svg";
+        link.click();
+      }
+    );
   } else {
-    link.href = canvas.toDataURL(`image/${format}`);
+    link.href = qrCanvas.toDataURL(`image/${format}`);
     link.download = `qr-code.${format}`;
     link.click();
   }
 }
+
+// Event listeners for real-time updates
+document.getElementById("qr-color").addEventListener("input", updateQRCodeLive);
+document.getElementById("qr-logo").addEventListener("change", updateLogo);

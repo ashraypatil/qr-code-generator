@@ -36,19 +36,23 @@
                     <label for="qr-color">QR Code Color:</label>
                     <input type="color" id="qr-color" value="#000000" onchange="updateQRCodeLive()" />
                 </div>
-                <label for="qr-logo">Upload Logo:</label>
-                <input type="file" id="qr-logo" accept="image/*" onchange="updateLogo()" />
-                <p class="logo-tip">Tip: For best results, use square logos under 500KB.</p>
+                <div class="logo-options">
+                    <label for="qr-logo">Upload Logo:</label>
+                    <input type="file" id="qr-logo" accept="image/*" onchange="updateLogo()" />
+                    <button onclick="removeLogo()">Remove Logo</button>
+                </div>
                 <div id="logo-resizer">
-                    <h4>Adjust Logo Size</h4>
+                    <label for="logo-size-slider">Adjust Logo Size:</label>
                     <input type="range" id="logo-size-slider" min="10" max="50" value="20" oninput="resizeLogo()" />
                 </div>
             </div>
             <div class="section download-options">
                 <h3>Download</h3>
-                <button onclick="downloadQRCode('png')">Download as PNG</button>
-                <button onclick="downloadQRCode('jpg')">Download as JPG</button>
-                <button onclick="downloadQRCode('svg')">Download as SVG</button>
+                <div class="download-buttons">
+                    <button onclick="downloadQRCode('png')">Download as PNG</button>
+                    <button onclick="downloadQRCode('jpg')">Download as JPG</button>
+                    <button onclick="downloadQRCode('svg')">Download as SVG</button>
+                </div>
             </div>
         </div>
     </div>

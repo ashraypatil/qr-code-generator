@@ -26,6 +26,7 @@ header {
 
 .row {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     margin: 1em 0;
     width: 100%;
@@ -33,30 +34,30 @@ header {
 
 .section {
     flex: 1;
-    margin: 0.5em;
-    padding: 1em;
+    margin: 1em;
+    padding: 1.5em;
     border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #f9f9f9;
 }
 
-.color-picker label {
-    display: inline-block;
-    margin-bottom: 0.5em;
+#input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
 }
 
-#logo-resizer {
-    margin-top: 1em;
-}
-
-#logo-size-slider {
-    width: 100%;
-    margin-top: 0.5em;
+#qr-input {
+    width: 80%;
+    max-width: 600px;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 button {
     padding: 0.5em 1em;
-    margin-top: 1em;
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -73,4 +74,33 @@ canvas {
     margin: 1em auto;
     border: 1px solid #ccc;
     border-radius: 8px;
+}
+
+#customization-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+}
+
+.logo-options {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+}
+
+#logo-resizer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+#logo-size-slider {
+    width: 100%;
+}
+
+.download-options .download-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    justify-content: center;
 }

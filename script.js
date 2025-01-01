@@ -1,4 +1,5 @@
 const qrCanvas = document.getElementById("qr-code");
+const downloadButtons = document.querySelectorAll(".download-buttons button");
 let logoImage = null;
 let logoSize = 20;
 
@@ -19,11 +20,22 @@ function generateQRCode() {
     },
   })
     .then(() => {
+      enableDownloadButtons();
       if (logoImage) {
         addLogoToCanvas();
       }
     })
     .catch((err) => console.error("Error generating QR code:", err));
+}
+
+// Enable download buttons
+function enableDownloadButtons() {
+  downloadButtons.forEach((button) => button.removeAttribute("disabled"));
+}
+
+// Disable download buttons
+function disableDownloadButtons() {
+  downloadButtons.forEach((button) => button.setAttribute("disabled", true));
 }
 
 // Live QR code update
@@ -48,6 +60,13 @@ function updateLogo() {
   }
 }
 
+// Remove logo and reset file input
+function removeLogo() {
+  logoImage = null;
+  document.getElementById("qr-logo").value = ""; // Clear file input
+  generateQRCode();
+}
+
 // Add logo to the QR code canvas
 function addLogoToCanvas() {
   const ctx = qrCanvas.getContext("2d");
@@ -62,12 +81,6 @@ function addLogoToCanvas() {
   ctx.drawImage(logoImage, logoX, logoY, scaledLogoSize, scaledLogoSize);
 }
 
-// Remove logo
-function removeLogo() {
-  logoImage = null;
-  generateQRCode();
-}
-
 // Resize logo dynamically
 function resizeLogo() {
   logoSize = document.getElementById("logo-size-slider").value;
@@ -76,6 +89,11 @@ function resizeLogo() {
 
 // Download the QR code
 function downloadQRCode(format) {
+  if (!qrCanvas) {
+    alert("No QR code available to download.");
+    return;
+  }
+
   const link = document.createElement("a");
 
   if (format === "svg") {

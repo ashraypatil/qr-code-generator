@@ -1,5 +1,6 @@
 const qrCanvas = document.getElementById("qr-code");
-let logoImage = null; // Store the uploaded logo image
+let logoImage = null;
+let logoSize = 0.2;
 
 // Generate the QR code
 function generateQRCode() {
@@ -54,11 +55,17 @@ function addLogoToCanvas() {
 
   if (!logoImage) return;
 
-  const logoSize = Math.min(width, height) * 0.2; // Logo should occupy 20% of QR code
-  const logoX = (width - logoSize) / 2;
-  const logoY = (height - logoSize) / 2;
+  const scaledLogoSize = Math.min(width, height) * (logoSize / 100);
+  const logoX = (width - scaledLogoSize) / 2;
+  const logoY = (height - scaledLogoSize) / 2;
 
-  ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+  ctx.drawImage(logoImage, logoX, logoY, scaledLogoSize, scaledLogoSize);
+}
+
+// Resize logo dynamically
+function resizeLogo() {
+  logoSize = document.getElementById("logo-size-slider").value;
+  generateQRCode();
 }
 
 // Download the QR code
@@ -96,6 +103,6 @@ function downloadQRCode(format) {
   }
 }
 
-// Event listeners for real-time updates
+// Event listeners
 document.getElementById("qr-color").addEventListener("input", updateQRCodeLive);
 document.getElementById("qr-logo").addEventListener("change", updateLogo);

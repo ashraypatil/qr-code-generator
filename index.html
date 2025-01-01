@@ -5,20 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Generator</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_TRACKING_ID"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'YOUR_TRACKING_ID');
-
-        // Track custom events
-        function trackEvent(eventName, eventDetails) {
-            if (window.gtag) {
-                gtag('event', eventName, eventDetails);
-            }
-        }
     </script>
 </head>
 <body>
@@ -27,7 +19,6 @@
     </header>
     <div class="container">
         <div class="row">
-            <!-- Input Section -->
             <div class="section" id="input-section">
                 <h3>Input</h3>
                 <input type="text" id="qr-input" placeholder="Enter text or URL" />
@@ -43,11 +34,15 @@
                 <h3>Customize</h3>
                 <div class="color-picker">
                     <label for="qr-color">QR Code Color:</label>
-                    <input type="color" id="qr-color" value="#000000" onchange="updateColor(); updateQRCodeLive()" />
+                    <input type="color" id="qr-color" value="#000000" onchange="updateQRCodeLive()" />
                 </div>
                 <label for="qr-logo">Upload Logo:</label>
-                <input type="file" id="qr-logo" accept="image/*" onchange="updateLogo(); updateQRCodeLive()" />
+                <input type="file" id="qr-logo" accept="image/*" onchange="updateLogo()" />
                 <p class="logo-tip">Tip: For best results, use square logos under 500KB.</p>
+                <div id="logo-resizer">
+                    <h4>Adjust Logo Size</h4>
+                    <input type="range" id="logo-size-slider" min="10" max="50" value="20" oninput="resizeLogo()" />
+                </div>
             </div>
             <div class="section download-options">
                 <h3>Download</h3>
